@@ -9,5 +9,3 @@
 - mysql
 
 ## todo
-- tx
-- aop
