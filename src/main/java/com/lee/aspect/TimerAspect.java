@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 import java.util.Calendar;
 import java.util.List;
 
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class TimerAspect {
-    @Autowired
+//    @Autowired
     private GirlMapper mapper;
 
     private static final Logger logger = LoggerFactory.getLogger(TimerAspect.class);

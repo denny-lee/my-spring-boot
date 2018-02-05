@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-@Mapper
+//@Mapper
 public interface GirlMapper {
     @Insert("insert into girl(name,age) values(#{name},#{age})")
     boolean save(Girl girl);
