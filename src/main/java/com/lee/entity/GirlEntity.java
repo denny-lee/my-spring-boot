@@ -1,11 +1,20 @@
-package com.lee.model;
+package com.lee.entity;
 
-import javax.validation.constraints.NotNull;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-public class Girl {
-    @NotNull
+/**
+ * @author : Liw
+ * @description :
+ * @date : 2018/4/4 10:41
+ */
+@Entity
+@Table(name = "girl")
+public class GirlEntity {
+
+    @Id
     private Integer id;
-    @NotNull
     private String name;
     private Integer age;
     private String nickName;
@@ -40,5 +49,15 @@ public class Girl {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    @Override
+    public String toString() {
+        return "GirlEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", nickName='" + nickName + '\'' +
+                '}';
     }
 }
