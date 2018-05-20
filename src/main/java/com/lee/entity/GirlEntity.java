@@ -21,7 +21,7 @@ public class GirlEntity {
     private Integer age;
     private String nickName;
 
-    @OneToMany(mappedBy = "myGirl")
+    @OneToMany(mappedBy = "myGirl", fetch = FetchType.EAGER)
     private Set<BoyFriendEntity> boyFriends;
 
     public Set<BoyFriendEntity> getBoyFriends() {

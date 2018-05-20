@@ -1,6 +1,7 @@
 package com.example;
 
 import com.lee.Application;
+import com.lee.entity.GirlEntity;
 import com.lee.service.GirlService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -23,7 +26,23 @@ public class JpaTest {
 
 	@Test
 	public void test1() {
-		girlService.updateSpec(18, 19, null);
+		girlService.updateSpec(18, 19, "Mary");
+	}
+
+	@Test
+	public void test2() {
+		GirlEntity entity = new GirlEntity();
+		entity.setId(10);
+		entity.setAge(18);
+		entity.setName("Alice");
+		entity.setNickName("Ali");
+		girlService.saveOrUpdate(entity);
+	}
+
+	@Test
+	public void test3() {
+		List<GirlEntity> list = girlService.queryByNickName("Mary");
+		log.info("mary : {}", list);
 	}
 
 }

@@ -10,10 +10,11 @@
             <charset>utf-8</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
+            <level>trace</level>
         </filter>
     </appender>
-    <!--<logger name="org.hibernate" level="INFO" />-->
+    <!--<logger name="org.hibernate" level="DEBUG" />-->
+    <!--<logger name="logging.level.org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" />-->
     <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>

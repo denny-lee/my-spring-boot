@@ -8,6 +8,7 @@ import com.lee.service.GirlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.*;
@@ -28,9 +29,15 @@ public class GirlServiceImpl implements GirlService {
     @Autowired
     private GirlRepository girlRepository;
 
+
     @Override
     public List<GirlEntity> query(GirlEntity entity) {
         return girlRepository.findAll(getSpec(entity));
+    }
+
+    @Override
+    public void saveOrUpdate(GirlEntity girlEntity) {
+        girlRepository.save(girlEntity);
     }
 
     @Override
@@ -47,4 +54,16 @@ public class GirlServiceImpl implements GirlService {
         };
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<GirlEntity> queryByNickName(String nickName) {
+        List<GirlEntity> gs = girlRepository.findAllByNickName(nickName);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        List<GirlEntity> gs2 = girlRepository.findAllByNickName(nickName);
+        return gs;
+    }
 }
