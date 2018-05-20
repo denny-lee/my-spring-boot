@@ -13,19 +13,19 @@ import org.springframework.context.annotation.Configuration;
  * @description :
  * @date : 2018/2/9 11:31
  */
-@Configuration
+//@Configuration
 public class MqConfig {
 
     private final AmqpAdmin amqpAdmin;
     private final AmqpTemplate amqpTemplate;
 
-    @Autowired
+//    @Autowired
     public MqConfig(AmqpAdmin amqpAdmin, AmqpTemplate amqpTemplate) {
         this.amqpAdmin = amqpAdmin;
         this.amqpTemplate = amqpTemplate;
     }
 
-    @Bean
+//    @Bean
     public DirectExchange topicExchange() {
         return new DirectExchange("msgInform", false, false);
     }

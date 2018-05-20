@@ -39,6 +39,15 @@ public class HelloController {
 		return "index";
 	}
 
+	@RequestMapping("/gb.json")
+	@ResponseBody
+	public Object gb(@RequestParam("age") int age, @RequestParam("name") String name) {
+		GirlEntity girlEntity = new GirlEntity();
+		girlEntity.setAge(age);
+		girlEntity.setName(name);
+		return girlService.query(girlEntity);
+	}
+
 	@RequestMapping("/add.json")
 	@ResponseBody
 	public ResponseData save(@RequestBody Girl girl, @RequestHeader("tk") String tk, Girl g) {

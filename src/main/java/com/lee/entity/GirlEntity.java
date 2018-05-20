@@ -1,8 +1,9 @@
 package com.lee.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import java.util.Set;
 
 /**
  * @author : Liw
@@ -11,6 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "girl")
+@DynamicUpdate
 public class GirlEntity {
 
     @Id
@@ -18,6 +20,17 @@ public class GirlEntity {
     private String name;
     private Integer age;
     private String nickName;
+
+    @OneToMany(mappedBy = "myGirl")
+    private Set<BoyFriendEntity> boyFriends;
+
+    public Set<BoyFriendEntity> getBoyFriends() {
+        return boyFriends;
+    }
+
+    public void setBoyFriends(Set<BoyFriendEntity> boyFriends) {
+        this.boyFriends = boyFriends;
+    }
 
     public Integer getId() {
         return id;
@@ -58,6 +71,7 @@ public class GirlEntity {
                 ", name='" + name + '\'' +
                 ", age=" + age +
                 ", nickName='" + nickName + '\'' +
+                ", boyFriends=" + boyFriends +
                 '}';
     }
 }
