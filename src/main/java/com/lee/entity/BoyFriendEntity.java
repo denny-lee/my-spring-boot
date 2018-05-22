@@ -12,17 +12,17 @@ public class BoyFriendEntity {
     private String name;
     private Integer girlId;
 
-    @ManyToOne(targetEntity = GirlEntity.class)
-    @JoinColumn(name = "girlId", referencedColumnName = "id", insertable = false, updatable = false)
-    private GirlEntity myGirl;
+//    @ManyToOne(targetEntity = GirlEntity.class)
+//    @JoinColumn(name = "girlId", referencedColumnName = "id", insertable = false, updatable = false)
+//    private GirlEntity myGirl;
 
-    public GirlEntity getMyGirl() {
-        return myGirl;
-    }
+//    public GirlEntity getMyGirl() {
+//        return myGirl;
+//    }
 
-    public void setMyGirl(GirlEntity myGirl) {
-        this.myGirl = myGirl;
-    }
+//    public void setMyGirl(GirlEntity myGirl) {
+//        this.myGirl = myGirl;
+//    }
 
     public Integer getGirlId() {
         return girlId;

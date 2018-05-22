@@ -16,34 +16,34 @@ import javax.sql.DataSource;
  * @description :
  * @date : 2018/4/4 11:20
  */
-@Configuration
+//@Configuration
 public class DataConfig {
 
-    @Autowired
-    private DataSource dataSource;
-
-    @Bean
-    public EntityManagerFactory entityManagerFactory() {
-
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(true);
-
-        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-        factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("com.lee.entity");
-        factory.setDataSource(dataSource);
-        factory.afterPropertiesSet();
-
-        return factory.getObject();
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager() {
-
-        JpaTransactionManager txManager = new JpaTransactionManager();
-        txManager.setEntityManagerFactory(entityManagerFactory());
-        return txManager;
-    }
+//    @Autowired
+//    private DataSource dataSource;
+//
+//    @Bean
+//    public EntityManagerFactory entityManagerFactory() {
+//
+//        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+//        vendorAdapter.setGenerateDdl(true);
+//
+//        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+//        factory.setJpaVendorAdapter(vendorAdapter);
+//        factory.setPackagesToScan("com.lee.entity");
+//        factory.setDataSource(dataSource);
+//        factory.afterPropertiesSet();
+//
+//        return factory.getObject();
+//    }
+//
+//    @Bean
+//    public PlatformTransactionManager transactionManager() {
+//
+//        JpaTransactionManager txManager = new JpaTransactionManager();
+//        txManager.setEntityManagerFactory(entityManagerFactory());
+//        return txManager;
+//    }
 
 
 }

@@ -2,8 +2,9 @@ package com.lee.entity;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author : Liw
@@ -21,16 +22,16 @@ public class GirlEntity {
     private Integer age;
     private String nickName;
 
-    @OneToMany(mappedBy = "myGirl", fetch = FetchType.EAGER)
-    private Set<BoyFriendEntity> boyFriends;
+//    @OneToMany(mappedBy = "myGirl", fetch = FetchType.EAGER)
+//    private Set<BoyFriendEntity> boyFriends;
 
-    public Set<BoyFriendEntity> getBoyFriends() {
-        return boyFriends;
-    }
+//    public Set<BoyFriendEntity> getBoyFriends() {
+//        return boyFriends;
+//    }
 
-    public void setBoyFriends(Set<BoyFriendEntity> boyFriends) {
-        this.boyFriends = boyFriends;
-    }
+//    public void setBoyFriends(Set<BoyFriendEntity> boyFriends) {
+//        this.boyFriends = boyFriends;
+//    }
 
     public Integer getId() {
         return id;
@@ -71,7 +72,7 @@ public class GirlEntity {
                 ", name='" + name + '\'' +
                 ", age=" + age +
                 ", nickName='" + nickName + '\'' +
-                ", boyFriends=" + boyFriends +
+//                ", boyFriends=" + boyFriends +
                 '}';
     }
 }
