@@ -8,6 +8,7 @@ import com.lee.service.GirlService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -33,10 +34,13 @@ public class HelloController {
 	private RabbitTemplate rabbitTemplate;
 	@Autowired
 	private GirlRepository girlRepository;
+	@Value("${mytest.value}")
+	private String hello;
 
 	@RequestMapping("/")
+	@ResponseBody
 	public String home() {
-		return "index";
+		return hello;
 	}
 
 	@RequestMapping("/gb.json")
