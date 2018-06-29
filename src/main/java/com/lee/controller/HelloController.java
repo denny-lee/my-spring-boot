@@ -1,11 +1,14 @@
 package com.lee.controller;
 
+import com.lee.config.RedisConfig;
 import com.lee.dao.GirlRepository;
 import com.lee.entity.GirlEntity;
 import com.lee.model.Girl;
 import com.lee.model.ResponseData;
 import com.lee.service.GirlService;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +25,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class HelloController {
@@ -33,10 +39,36 @@ public class HelloController {
 	private RabbitTemplate rabbitTemplate;
 	@Autowired
 	private GirlRepository girlRepository;
+	@Autowired
+	private RedissonClient redissonClient;
 
 	@RequestMapping("/")
 	public String home() {
 		return "index";
+	}
+
+	@RequestMapping("/lock.json")
+	@ResponseBody
+	public Object testLock(@RequestParam("name") String name) throws InterruptedException {
+		RLock rLock = redissonClient
+				.getLock(RedisConfig.CACHE_NAME + name);
+		boolean isLocked = false;
+		try {
+			isLocked = rLock.tryLock(60, 10, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			System.out.println("----------ERROR.--------");
+		}
+		try {
+			System.out.println(new Date(System.currentTimeMillis()) + "---------isLocked:--"+isLocked+"---------hi~~~~~~~"+name+"~~~~~" + Thread.currentThread().getId()+"~~~START");
+					Thread.sleep(15000);
+			System.out.println(new Date(System.currentTimeMillis()) + "---------isLocked:--"+isLocked+"---------hi~~~~~~~"+name+"~~~~~" + Thread.currentThread().getId()+"~~~END");
+		}finally{
+			if(isLocked){
+				rLock.unlock();
+			}
+		}
+		return "ok";
 	}
 
 	@RequestMapping("/gb.json")
