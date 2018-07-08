@@ -58,12 +58,6 @@ public class GirlServiceImpl implements GirlService {
     @Transactional(readOnly = true)
     public List<GirlEntity> queryByNickName(String nickName) {
         List<GirlEntity> gs = girlRepository.findAllByNickName(nickName);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        List<GirlEntity> gs2 = girlRepository.findAllByNickName(nickName);
         return gs;
     }
 }

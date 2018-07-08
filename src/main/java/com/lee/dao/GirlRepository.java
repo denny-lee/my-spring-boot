@@ -14,6 +14,6 @@ public interface GirlRepository extends JpaRepository<GirlEntity, Integer>,
     @Query("update #{#entityName} a set a.age = :newAge, a.nickName=:name where a.age = :oldAge")
     int updateAge(@Param("oldAge") Integer oldAge, @Param("newAge") Integer newAge, @Param("name") String name);
 
-    @Lock(value = LockModeType.PESSIMISTIC_READ)
+//    @Lock(value = LockModeType.PESSIMISTIC_READ)
     List<GirlEntity> findAllByNickName(String nickName);
 }
