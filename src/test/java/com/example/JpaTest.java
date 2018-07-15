@@ -2,6 +2,7 @@ package com.example;
 
 import com.lee.Application;
 import com.lee.entity.GirlEntity;
+import com.lee.model.CountPojo;
 import com.lee.service.GirlService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -43,6 +45,14 @@ public class JpaTest {
 	public void test3() {
 		List<GirlEntity> list = girlService.queryByNickName("Mary");
 		log.info("mary : {}", list);
+	}
+
+	@Test
+	public void test4() {
+		List<CountPojo> list = girlService.queryNative();
+		for (CountPojo m : list) {
+			System.out.println("name:" + m.getName() + ", ageTotal:"+ m.getAgeTotal());
+		}
 	}
 
 }

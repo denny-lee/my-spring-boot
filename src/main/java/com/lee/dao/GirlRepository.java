@@ -1,11 +1,13 @@
 package com.lee.dao;
 
 import com.lee.entity.GirlEntity;
+import com.lee.model.CountPojo;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
 import javax.persistence.LockModeType;
 import java.util.List;
+import java.util.Map;
 
 public interface GirlRepository extends JpaRepository<GirlEntity, Integer>,
         JpaSpecificationExecutor<GirlEntity> {
@@ -16,4 +18,7 @@ public interface GirlRepository extends JpaRepository<GirlEntity, Integer>,
 
 //    @Lock(value = LockModeType.PESSIMISTIC_READ)
     List<GirlEntity> findAllByNickName(String nickName);
+
+    @Query(name = "girlGroup")
+    List<CountPojo> queryNative();
 }

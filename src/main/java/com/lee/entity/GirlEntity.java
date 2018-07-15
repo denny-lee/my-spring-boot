@@ -13,7 +13,22 @@ import java.util.Set;
 @Entity
 @Table(name = "girl")
 @DynamicUpdate
+@NamedNativeQuery(
+        name = "girlGroup",
+        query = "SELECT `name` AS name, SUM(age) AS ageTotal FROM girl g GROUP BY `name`",
+        resultSetMapping = "rs"
+)
+@SqlResultSetMapping(name = "rs",
+        classes = {
+        @ConstructorResult(
+                targetClass = com.lee.model.CountPojo.class,
+                columns = {@ColumnResult(name = "name"), @ColumnResult(name = "ageTotal")}
+                )
+        }
+)
 public class GirlEntity {
+
+
 
     @Id
     private Integer id;

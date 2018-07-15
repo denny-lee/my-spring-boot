@@ -3,6 +3,7 @@ package com.lee.service.impl;
 import com.lee.dao.GirlMapper;
 import com.lee.dao.GirlRepository;
 import com.lee.entity.GirlEntity;
+import com.lee.model.CountPojo;
 import com.lee.model.Girl;
 import com.lee.service.GirlService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -29,6 +31,10 @@ public class GirlServiceImpl implements GirlService {
     @Autowired
     private GirlRepository girlRepository;
 
+    @Override
+    public List<CountPojo> queryNative() {
+        return girlRepository.queryNative();
+    }
 
     @Override
     public List<GirlEntity> query(GirlEntity entity) {
