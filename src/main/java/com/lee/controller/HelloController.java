@@ -1,101 +1,125 @@
 package com.lee.controller;
 
+import com.lee.SignUtil;
+import com.lee.entity.ChoiseEntity;
+import com.lee.entity.GuyEntity;
+import com.lee.entity.OptionEntity;
+import com.lee.pojo.UserInfo;
+import com.lee.service.impl.TreatService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Calendar;
 
-@Controller
+@RestController
 public class HelloController {
+    private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
 
-	@Autowired
-	private GirlService girlService;
-	@Autowired
-	private RabbitTemplate rabbitTemplate;
-	@Autowired
-	private GirlRepository girlRepository;
+    @Autowired
+    private TreatService treatService;
 
-	@RequestMapping("/")
-	public String home() {
-		return "index";
-	}
+    @GetMapping("/user")
+    public Object fetchUser(@RequestParam("name") String name) {
+        if (StringUtils.isBlank(name)) {
+            return new ArrayList<>();
+        }
+        return treatService.fetchByName(name);
+    }
 
-	@RequestMapping("/gb.json")
-	@ResponseBody
-	public Object gb(@RequestParam("age") int age, @RequestParam("name") String name) {
-		GirlEntity girlEntity = new GirlEntity();
-		girlEntity.setAge(age);
-		girlEntity.setName(name);
-		return girlService.query(girlEntity);
-	}
+    @GetMapping("/choosen")
+    public Object choosen(@RequestParam("uid") Integer uid, @RequestParam("key") Long key) {
+        GuyEntity user = treatService.getGuy(uid);
+        if (null == user) {
+            return "user 不能为空";
+        }
+        int[] keyArr = SignUtil.decode(key.intValue());
+        int date = Calendar.getInstance().get(Calendar.DATE);
+        if (null != keyArr) {
+            logger.info("cid:{}, dt:{}, uid:{}", keyArr[0], keyArr[1], keyArr[2]);
+            logger.info("date:{}", date);
+        }
+        if (null == keyArr || uid != keyArr[2] || date != keyArr[1]) {
+            return "参数错误";
+        }
+        int cid = keyArr[0];
+        OptionEntity op = treatService.getOption(cid);
+        if (null == op) {
+            return "无此选项";
+        }
+        ChoiseEntity c = new ChoiseEntity();
+        c.setCid(cid);
+        c.setDescription(op.getDescription());
+        c.setUid(uid);
+        c.setName(user.getName());
+        treatService.addChoise(c);
 
-	@RequestMapping("/add.json")
-	@ResponseBody
-	public ResponseData save(@RequestBody Girl girl, @RequestHeader("tk") String tk, Girl g) {
-		/*try {
-			girlService.save(girl);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}*/
-		System.out.println("save----------------{}" + g.getAge());
-		return new ResponseData(1, "bingo");
-	}
+        return "ok:"+c.getId();
+    }
 
-	@RequestMapping(value = "/aa.json", method = RequestMethod.POST)
-	@ResponseBody
-	public String save1(@RequestParam("route") String route) {
-		if (StringUtils.isBlank(route)) {
-			route = "good";
-		}
-		System.out.println("--------------"+route);
-		rabbitTemplate.convertAndSend("msgInform", route, "hera comes a message");
-		return "{\"result\":\"ok\"}";
-	}
+    @GetMapping("/reject")
+    public Object reject(@RequestParam("key") Long key) {
+        int[] keyArr = SignUtil.decode(key.intValue());
+        int date = Calendar.getInstance().get(Calendar.DATE);
 
-	@RequestMapping(value = "/aaa.json", method = RequestMethod.POST)
-	@ResponseBody
-	public String save2(@Valid @RequestBody Girl girl) {
-		System.out.println("--------------"+girl);
-		return "{\"result\":\"ok\"}";
-	}
+        if (null != keyArr) {
+            logger.info("cid:{}, dt:{}, uid:{}", keyArr[0], keyArr[1], keyArr[2]);
+            logger.info("date:{}", date);
+        }
+        if (null == keyArr || date != keyArr[1]) {
+            return "参数错误";
+        }
+        int id = keyArr[0];
+        treatService.reject(id);
+        return "ok";
+    }
 
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	@ResponseBody
-	public Object test(@RequestParam(value = "name") String name, @RequestParam(value = "age") Integer age, @RequestParam(value = "nickName") String nickName) {
-		PageRequest pageRequest = new PageRequest(0,
-				10);
-		Page<GirlEntity> page = girlRepository.findAll(getSpecification(name, nickName, age), pageRequest);
-//		List<GirlEntity> page = girlRepository.findAll();
+    @GetMapping("/initState")
+    public Object initState(@RequestParam("uid") Integer uid) {
+        if (null == uid) {
+            return "user 不存在";
+        }
+        GuyEntity g = treatService.getGuy(uid);
+        ChoiseEntity c = treatService.queryByUserId(uid);
+        if (null == g) {
+            return "user 不存在";
+        }
+        if (null == c) {
+            return new UserInfo(g.getTimes(), null, "");
+        }
+        return new UserInfo(g.getTimes(), c.getId(), c.getDescription());
+    }
 
-//		System.out.println("--------------"+girl);
-		return page;
-	}
+    @GetMapping("/listAll")
+    public Object listAll() {
+        return treatService.listAll();
+    }
 
-	/*@RequestMapping(value = "/400", method = RequestMethod.POST)
-	@ResponseBody
-	public String error400() {
-		System.out.println("----400----------");
-		return "{\"result\":\"ok\"}";
-	}*/
-
-	private Specification<GirlEntity> getSpecification(final String name, final String nickName, final Integer age) {
-		return (Root<GirlEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) -> {
-			Predicate p1 = cb.equal(root.get("name").as(String.class), name);
-			Predicate p2 = cb.equal(root.get("nickName").as(String.class), nickName);
-			Predicate p3 = cb.equal(root.get("age").as(Integer.class), age);
-			Predicate p = cb.or(cb.and(p1, p3), cb.and(p2, p3));
-			return query.where(p).getRestriction();
-		};
-	}
+    @GetMapping("/taste")
+    public Object taste(@RequestParam("uid") Integer uid, @RequestParam("taste") String taste) {
+        ChoiseEntity cc = treatService.queryByUserId(uid);
+        if (null == cc) {
+            GuyEntity user = treatService.getGuy(uid);
+            if (null == user) {
+                return "user 不能为空";
+            }
+            ChoiseEntity c = new ChoiseEntity();
+            c.setCid(2);
+            c.setDescription("请你喝一点点奶茶");
+            c.setUid(uid);
+            c.setName(user.getName());
+            c.setRemark(taste);
+            treatService.addChoise(c);
+        } else {
+            cc.setRemark(taste);
+            treatService.save(cc);
+        }
+        return "ok";
+    }
 
 }

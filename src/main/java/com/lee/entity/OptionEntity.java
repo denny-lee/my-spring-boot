@@ -3,6 +3,7 @@ package com.lee.entity;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -17,15 +18,15 @@ import javax.persistence.Table;
 public class OptionEntity {
 
     @Id
+    @GeneratedValue
     private Integer id;
-    private String desc;
+    private String description;
 
-    @Override
-    public String toString() {
-        return "OptionEntity{" +
-                "id=" + id +
-                ", desc='" + desc + '\'' +
-                '}';
+    public OptionEntity() {
+    }
+
+    public OptionEntity(String description) {
+        this.description = description;
     }
 
     public Integer getId() {
@@ -36,11 +37,11 @@ public class OptionEntity {
         this.id = id;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

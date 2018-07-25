@@ -16,10 +16,20 @@ import java.util.Set;
 public class GuyEntity {
 
     @Id
+    @GeneratedValue
     private Integer id;
     private String name;
     private Integer times;
     private Integer type;
+
+    public GuyEntity() {
+    }
+
+    public GuyEntity(String name, Integer times, Integer type) {
+        this.name = name;
+        this.times = times;
+        this.type = type;
+    }
 
     @Override
     public String toString() {

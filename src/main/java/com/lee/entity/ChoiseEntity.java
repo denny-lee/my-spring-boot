@@ -3,6 +3,7 @@ package com.lee.entity;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
@@ -18,13 +19,15 @@ import java.util.Date;
 public class ChoiseEntity {
 
     @Id
+    @GeneratedValue
     private Integer id;
     private Integer uid;
     private String name;
     private Integer cid;
-    private String desc;
+    private String description;
     private Date createTime;
     private boolean delFlag = false;
+    private String remark;
 
     @Override
     public String toString() {
@@ -33,10 +36,19 @@ public class ChoiseEntity {
                 ", uid=" + uid +
                 ", name='" + name + '\'' +
                 ", cid=" + cid +
-                ", desc='" + desc + '\'' +
+                ", description='" + description + '\'' +
                 ", createTime=" + createTime +
                 ", delFlag=" + delFlag +
+                ", remark='" + remark + '\'' +
                 '}';
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Integer getId() {
@@ -71,12 +83,12 @@ public class ChoiseEntity {
         this.cid = cid;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getCreateTime() {

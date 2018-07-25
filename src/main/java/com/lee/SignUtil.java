@@ -82,4 +82,18 @@ public class SignUtil {
             return content.toString();
         }
     }
+
+    public static int[] decode(int i) {
+        int uid = i&(-1 ^ -1<<5);
+        int dt = (i>>>5)&(-1 ^ -1<<5);
+        int cid = (i>>>10)&(-1 ^ -1<<10);
+        return new int[]{cid, dt, uid};
+    }
+
+    /*public static void main(String[] args) {
+        int[] a = decode(5708);
+        System.out.println(a[0]);
+        System.out.println(a[1]);
+        System.out.println(a[2]);
+    }*/
 }
